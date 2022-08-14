@@ -1,6 +1,7 @@
 const express = require("express");
 const Joi = require("joi");
 const User = require("../models/user.model");
+const userMiddleware = require("../middlewares/signup.middleware");
 const bcrypt = require("bcrypt");
 const router = express.Router();
 router.use(express.json());
@@ -10,7 +11,7 @@ router.get("/api/users", async (req, res) => {
   return res.send(result);
 });
 
-router.post("/api/register", async (req, res) => {
+router.post("/api/register", userMiddleware, async (req, res) => {
   const { error } = validateUser(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);

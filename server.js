@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
@@ -16,7 +17,14 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
+mongoose
+  .connect("mongodb://localhost:27017/to-do-app")
+  .then(() => {
+    console.log("connet to DB success");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 // task routes
 app.use("/api/tasks", task);
 
@@ -28,6 +36,3 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
-
-// connect database
-const db = require("./app/models");
